@@ -20,3 +20,4 @@ fetch("http://localhost:3000/api/products/" + newID)
     alert("Le serveur ne répond pas.");
   });
 
+// appeller une fois le fetch dans une variable, "variable globale"
