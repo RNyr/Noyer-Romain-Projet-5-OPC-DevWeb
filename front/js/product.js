@@ -24,3 +24,5 @@ fetch("http://localhost:3000/api/products/" + newID)
   .catch((_error) => {
     alert("Le serveur ne répond pas.");
   });
+
+//------ je n'arrive pas encore a faire apparaitre l'image
