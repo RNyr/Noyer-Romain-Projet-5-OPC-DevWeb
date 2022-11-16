@@ -15,9 +15,8 @@ fetch("http://localhost:3000/api/products/" + newID)
     price.innerText = `${data.price}`;
     description.innerText = `${data.description}`;
   })
-  //--------------Message d'erreur-----------------------
+  //--------------Message d'erreur----------------
   .catch((_error) => {
     alert("Le serveur ne répond pas.");
   });
 
-//------ je n'arrive pas encore a faire apparaître l'image
