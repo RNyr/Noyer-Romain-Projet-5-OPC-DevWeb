@@ -52,7 +52,8 @@ const quantity = document.getElementById("quantity");
 const addToCart = document.getElementById("addToCart");
 
 // je configure un eventListener quand l'utilisateur clique sur ajouter au panier
-addToCart.addEventListener("click", () => {
+addToCart.addEventListener("click", (event) => {
+  event.preventDefault();
   let choice = {
     id: productId,
     image: imageUrl,
@@ -80,6 +81,10 @@ addToCart.addEventListener("click", () => {
     localStorage.setItem("product", JSON.stringify(productInLocalStorage));
   };
 
+  let addConfirm = () => {
+    alert("Le produit a bien été ajouté au panier");
+  };
+
   let update = false;
 
   // s'il y a des produits enregistrés dans le localStorage
@@ -92,11 +97,13 @@ addToCart.addEventListener("click", () => {
           parseInt(productOk.quantity) + parseInt(quantity.value);
         localStorage.setItem("product", JSON.stringify(productInLocalStorage));
         update = true;
+        addConfirm();
       }
     });
 
     if (!update) {
       addProductLocalStorage();
+      addConfirm();
     }
   }
   // s'il n'y a aucun produit enregistré dans le localStorage
@@ -104,5 +111,6 @@ addToCart.addEventListener("click", () => {
     // je crée alors un tableau avec les éléments choisi par l'utilisateur
     productInLocalStorage = [];
     addProductLocalStorage();
+    addConfirm();
   }
 });

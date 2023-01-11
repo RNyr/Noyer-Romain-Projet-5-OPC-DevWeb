@@ -157,17 +157,15 @@ if (productInLocalStorage === null || productInLocalStorage == 0) {
 //DEMANDER LES INFOS DE L'UTILISATEUR//
 /**********************************/
 
-const adressRegExp = new RegExp("^[A-zÀ-ú0-9 ,.'-]+$");
-const nameRegExp = new RegExp("^[A-zÀ-ú -]+$");
-const emailRegExp = new RegExp(
-  "^[a-zA-Z0-9_. -]+@[a-zA-Z.-]+[.]{1}[a-z]{2,10}$"
-);
+const nameRegExp = /^[a-zA-Z]{3,20}$/;
+const adressRegExp = /^[a-zA-Z0-9\s,'-]*$/;
+const emailRegExp = /^[\w.-]+@[\w-]+\.[\w.]{2,}$/;
 
-// j'envoie le formulaire dans le serveur
-let postForm = () => {
+function postForm() {
   const order = document.getElementById("order");
-  order.addEventListener("click", () => {
-    // je récupère les données du formulaire dans un objet
+  order.addEventListener("click", (event) => {
+    event.preventDefault();
+
     const contact = {
       firstName: document.getElementById("firstName").value,
       lastName: document.getElementById("lastName").value,
@@ -176,12 +174,7 @@ let postForm = () => {
       email: document.getElementById("email").value,
     };
 
-    ////
-    // --- vérifier la validation des entrées --- //
-    ////
-
-    //contrôle prénom
-    let controlFirstName = () => {
+    function controlFirstName() {
       const validFirstName = contact.firstName;
       if (nameRegExp.test(validFirstName)) {
         return true;
@@ -189,10 +182,11 @@ let postForm = () => {
         let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
         firstNameErrorMsg.innerText =
           "Merci de vérifier le prénom, 3 caractères minimum";
+        return false;
       }
-    };
-    // contrôle nom
-    let controlName = () => {
+    }
+
+    function controlName() {
       const validName = contact.lastName;
       if (nameRegExp.test(validName)) {
         return true;
@@ -200,10 +194,11 @@ let postForm = () => {
         let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
         lastNameErrorMsg.innerText =
           "Merci de vérifier le nom, 3 caractères minimum, avec des lettres uniquement";
+        return false;
       }
-    };
-    // contrôle adresse
-    let controlAddress = () => {
+    }
+
+    function controlAddress() {
       const validAddress = contact.address;
       if (adressRegExp.test(validAddress)) {
         return true;
@@ -211,36 +206,34 @@ let postForm = () => {
         let addressErrorMsg = document.getElementById("addressErrorMsg");
         addressErrorMsg.innerText =
           "Merci de vérifier l'adresse, alphanumérique et sans caractères spéciaux";
+        return false;
       }
-    };
-    // contrôle ville
-    let controlCity = () => {
-      const validAddress = contact.city;
-      if (nameRegExp.test(validAddress)) {
+    }
+
+    function controlCity() {
+      const validCity = contact.city;
+      if (adressRegExp.test(validCity)) {
         return true;
       } else {
         let cityErrorMsg = document.getElementById("cityErrorMsg");
         cityErrorMsg.innerText =
           "Merci de vérifier le nom de la ville, 3 caractères minimum, avec des lettres uniquement";
+        return false;
       }
-    };
-    // contrôle email
-    let controlEmail = () => {
+    }
+
+    function controlEmail() {
       const validEmail = contact.email;
       if (emailRegExp.test(validEmail)) {
         return true;
       } else {
         let emailErrorMsg = document.getElementById("emailErrorMsg");
         emailErrorMsg.innerText = "Erreur ! Email non valide";
+        return false;
       }
-    };
+    }
 
-    ////
-    // --- FIN vérifier la validation des entrées --- //
-    ////
-
-    // Après vérification des entrées, j'envoie l'objet contact dans le localStorage
-    let validControl = () => {
+    function validControl() {
       if (
         controlFirstName() &&
         controlName() &&
@@ -253,19 +246,14 @@ let postForm = () => {
       } else {
         alert("Merci de revérifier les données du formulaire");
       }
-    };
+    }
     validControl();
-
-    // je mets les valeurs du formulaire et les produits sélectionnés
-    // dans un objet...
 
     const sendFormData = {
       contact,
       products,
     };
 
-    // j'envoie le formulaire + localStorage (sendFormData)
-    // ... que j'envoie au serveur
     const options = {
       method: "POST",
       body: JSON.stringify(sendFormData),
@@ -282,6 +270,6 @@ let postForm = () => {
           document.location.href = "confirmation.html?id=" + data.orderId;
         }
       });
-  }); // fin eventListener postForm
-}; // fin envoi du formulaire postForm
+  });
+}
 postForm();
